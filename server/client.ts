@@ -6,7 +6,7 @@ export default function (event: H3Event<EventHandlerRequest>) {
 
   return createFetch({
     defaults: {
-      baseURL: ticketmaster.baseUrl,
+      baseURL: 'https://app.ticketmaster.com/discovery/v2',
       params: {
         apikey: ticketmaster.apiKey
       }

@@ -13,7 +13,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     ticketmaster: {
       apiKey: '',
-      baseUrl: ''
     }
   }
 })
