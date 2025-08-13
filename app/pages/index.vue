@@ -37,7 +37,8 @@ const { data, status } = await useFetch('/api/events', {
 const columns: TableColumn<Eventt>[] = [
   {
     accessorKey: 'images',
-    header: 'Immagine',
+    header: '',
+    meta: { class: { td: 'min-w-30' } },
     cell: ({ getValue }) => {
       const a = getValue<Eventt['images']>()
       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
@@ -107,12 +108,12 @@ const columns: TableColumn<Eventt>[] = [
       return val === 'Undefined' ? undefined : val
     }
   },
-  {
-    accessorKey: '_embedded',
-    cell: row => {
-      const v = row.getValue<Eventt['_embedded']>()
-      console.log('_embedded ~ v:', v)
-    }
-  },
+  // {
+  //   accessorKey: '_embedded',
+  //   cell: row => {
+  //     const v = row.getValue<Eventt['_embedded']>()
+  //     console.log('_embedded ~ v:', v)
+  //   }
+  // },
 ]
 </script>

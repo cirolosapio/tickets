@@ -40,7 +40,8 @@ const { data, status } = await useFetch('/api/venues', {
 const columns: TableColumn<Venue>[] = [
   {
     accessorKey: 'images',
-    header: 'Immagine',
+    header: '',
+    meta: { class: { td: 'min-w-30' } },
     cell: ({ getValue }) => {
       const a = getValue<Venue['images']>()
       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
