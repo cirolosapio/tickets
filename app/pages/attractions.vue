@@ -4,7 +4,7 @@
     <UInput v-model="input" placeholder="Cerca" />
   </div>
 
-  <UTable ref="table" sticky :columns :data="data!.rows" class="flex-1 max-h-[70vh]" :loading="status === 'pending'" />
+  <UTable ref="table" sticky :columns :data="data?.rows" class="flex-1 max-h-[70vh]" :loading="status === 'pending'" />
 
   <div class="flex justify-center border-t border-default pt-4">
     <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
