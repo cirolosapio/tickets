@@ -3,7 +3,37 @@
     <div>{{ data?.pagination.totalElements }} eventi trovati</div>
     <UInput v-model="input" placeholder="Cerca" />
   </div>
-  <UTable ref="table" sticky :columns :data="data?.rows" class="flex-1 max-h-[70vh]" :loading="status === 'pending'" />
+
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
+    <template v-if="data?.rows?.length">
+      <UCard v-for="event in data.rows" :key="event.id"
+        class="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-200">
+        <div class="aspect-video w-full mb-2 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
+          <Images v-if="event.images" :images="event.images" />
+        </div>
+        <div class="flex-1 flex flex-col gap-1">
+          <div class="font-semibold text-lg line-clamp-2">{{ event.name }}</div>
+          <div class="text-sm text-gray-500">{{ formatDate(event.dates?.start) }}</div>
+          <div class="text-xs text-gray-400">{{ formatSales(event.sales?.public) }}</div>
+          <div class="flex flex-wrap gap-1 mt-1">
+            <UBadge
+              v-if="event.classifications?.[0]?.genre?.name && event.classifications[0].genre.name !== 'Non definito'"
+              color="primary" variant="soft">
+              {{ event.classifications[0].genre.name }}
+            </UBadge>
+            <UBadge
+              v-if="event.classifications?.[0]?.subGenre?.name && event.classifications[0].subGenre.name !== 'Non definito'"
+              color="neutral" variant="soft">
+              {{ event.classifications[0].subGenre.name }}
+            </UBadge>
+          </div>
+        </div>
+      </UCard>
+    </template>
+    <template v-else>
+      <div class="col-span-full text-center text-gray-400 py-8">Nessun evento trovato.</div>
+    </template>
+  </div>
 
   <div class="flex justify-center border-t border-default pt-4">
     <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
@@ -11,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtImg } from '#components'
 import type { TableColumn } from '@nuxt/ui'
 import type { Eventt } from '~~/types'
 
@@ -34,86 +63,34 @@ const { data, status } = await useFetch('/api/events', {
   params: { page, keyword, attractionId, subGenreId, venueId },
 })
 
-const columns: TableColumn<Eventt>[] = [
-  {
-    accessorKey: 'images',
-    header: '',
-    meta: { class: { td: 'min-w-30' } },
-    cell: ({ getValue }) => {
-      const a = getValue<Eventt['images']>()
-      const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
-      return first
-        ? h(NuxtImg, { src: first.url })
-        : null
-    }
-  },
-  // {
-  //   accessorKey: 'seatmap',
-  //   cell: ({ getValue }) => {
-  //     const a = getValue<Eventt['seatmap']>()
-  //     return a?.staticUrl
-  //       ? h(NuxtImg, { src: a.staticUrl })
-  //       : null
-  //   }
-  // },
-  // { accessorKey: 'id', },
-  { accessorKey: 'name', header: 'Nome' },
-  {
-    accessorKey: 'sales',
-    header: 'In Venidita da',
-    cell: (row) => {
-      const sales = row.getValue<Eventt['sales']>().public
-      if (sales.startTBD) return 'TBD'
-      if (sales.startTBA) return 'TBA'
-      return new Date(sales.startDateTime).toLocaleString('it-IT', {
-        year: 'numeric',
-        day: 'numeric',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      })
-    }
-  },
-  {
-    accessorKey: 'dates',
-    header: 'Data',
-    cell: (row) => {
-      const dates = row.getValue<Eventt['dates']>().start
-      if (dates.dateTBD) return 'TBD'
-      if (dates.dateTBA) return 'TBA'
-      return new Date(dates.dateTime).toLocaleString('it-IT', {
-        year: 'numeric',
-        day: 'numeric',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      })
-    }
-  },
-  {
-    accessorKey: 'genre',
-    header: 'Genere',
-    cell: ({ row }) => {
-      const val = row.original.classifications[0]?.genre?.name
-      return val === 'Undefined' ? undefined : val
-    }
-  },
-  {
-    accessorKey: 'subGenre',
-    header: 'Sotto Genere',
-    cell: ({ row }) => {
-      const val = row.original.classifications[0]?.subGenre?.name
-      return val === 'Undefined' ? undefined : val
-    }
-  },
-  // {
-  //   accessorKey: '_embedded',
-  //   cell: row => {
-  //     const v = row.getValue<Eventt['_embedded']>()
-  //     console.log('_embedded ~ v:', v)
-  //   }
-  // },
-]
+
+function formatDate (start?: any) {
+  if (!start) return ''
+  if (start.dateTBD) return 'TBD'
+  if (start.dateTBA) return 'TBA'
+  if (!start.dateTime) return ''
+  return new Date(start.dateTime).toLocaleString('it-IT', {
+    year: 'numeric',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+}
+
+function formatSales (sales?: any) {
+  if (!sales) return ''
+  if (sales.startTBD) return 'TBD'
+  if (sales.startTBA) return 'TBA'
+  if (!sales.startDateTime) return ''
+  return 'In vendita da ' + new Date(sales.startDateTime).toLocaleString('it-IT', {
+    year: 'numeric',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+}
 </script>

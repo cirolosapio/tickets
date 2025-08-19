@@ -4,7 +4,28 @@
     <UInput v-model="input" placeholder="Cerca" />
   </div>
 
-  <UTable ref="table" sticky :columns :data="data?.rows" class="flex-1 max-h-[70vh]" :loading="status === 'pending'" />
+
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
+    <template v-if="data?.rows?.length">
+      <UCard v-for="attraction in data.rows" :key="attraction.id"
+        class="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-200">
+        <div class="aspect-video w-full mb-2 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
+          <Images v-if="attraction.images" :images="attraction.images" />
+        </div>
+        <div class="flex-1 flex flex-col gap-1">
+          <div class="font-semibold text-lg line-clamp-2">{{ attraction.name }}</div>
+          <div class="flex justify-between mt-1">
+            <Badges :classification="attraction.classifications[0]" v-if="attraction.classifications[0]" />
+
+            <UButton size="xs" color="secondary" variant="soft" :to="`/?attractionId=${attraction.id}`">Eventi</UButton>
+          </div>
+        </div>
+      </UCard>
+    </template>
+    <template v-else>
+      <div class="col-span-full text-center text-gray-400 py-8">Nessun artista trovato.</div>
+    </template>
+  </div>
 
   <div class="flex justify-center border-t border-default pt-4">
     <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
@@ -12,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtImg } from '#components'
 import type { Row } from '@tanstack/vue-table'
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { Attraction } from '~~/types'
@@ -50,7 +70,7 @@ const columns: TableColumn<Attraction>[] = [
       const a = getValue<Attraction['images']>()
       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
       return first
-        ? h(NuxtImg, { provider: 'none', src: first.url })
+        ? h('img', { src: first.url })
         : null
     }
   },
@@ -63,7 +83,7 @@ const columns: TableColumn<Attraction>[] = [
     header: 'Genere',
     cell: ({ row }) => {
       const val = row.original.classifications[0]?.genre?.name
-      return val === 'Undefined' ? undefined : val
+      return val === 'Non definito' ? undefined : val
     }
   },
   {
@@ -71,7 +91,7 @@ const columns: TableColumn<Attraction>[] = [
     header: 'Sotto Genere',
     cell: ({ row }) => {
       const val = row.original.classifications[0]?.subGenre?.name
-      return val === 'Undefined' ? undefined : val
+      return val === 'Non definito' ? undefined : val
     }
   },
   {

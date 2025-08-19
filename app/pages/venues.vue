@@ -4,7 +4,33 @@
     <UInput v-model="input" placeholder="Cerca" />
   </div>
 
-  <UTable ref="table" sticky :columns :data="data?.rows" class="flex-1 max-h-[70vh]" :loading="status === 'pending'" />
+
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
+    <template v-if="data?.rows?.length">
+      <UCard v-for="venue in data.rows" :key="venue.id"
+        class="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-200">
+        <div class="aspect-video w-full mb-2 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
+          <Images v-if="venue.images" :images="venue.images" />
+        </div>
+        <div class="flex-1 flex flex-col gap-1">
+          <div class="font-semibold text-lg line-clamp-2">{{ venue.name }}</div>
+          <div class="flex justify-between">
+            <div class="flex flex-col">
+              <div class="text-sm text-gray-500">{{ venue.city?.name }}<span v-if="venue.state?.name">, {{
+                venue.state.name
+                  }}</span>
+              </div>
+              <div class="text-xs text-gray-400">{{ venue.country?.countryCode }} - {{ venue.country?.name }}</div>
+            </div>
+            <UButton color="secondary" variant="soft" :to="`/?venueId=${venue.id}`">Eventi</UButton>
+          </div>
+        </div>
+      </UCard>
+    </template>
+    <template v-else>
+      <div class="col-span-full text-center text-gray-400 py-8">Nessun luogo trovato.</div>
+    </template>
+  </div>
 
   <div class="flex justify-center border-t border-default pt-4">
     <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
@@ -12,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtImg } from '#components'
 import type { Row } from '@tanstack/vue-table'
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { Venue } from '~~/types'
@@ -46,7 +71,7 @@ const columns: TableColumn<Venue>[] = [
       const a = getValue<Venue['images']>()
       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
       return first
-        ? h(NuxtImg, { src: first.url })
+        ? h('img', { src: first.url })
         : null
     }
   },
