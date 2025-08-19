@@ -50,7 +50,7 @@ const columns: TableColumn<Attraction>[] = [
       const a = getValue<Attraction['images']>()
       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
       return first
-        ? h(NuxtImg, { src: first.url })
+        ? h(NuxtImg, { provider: 'none', src: first.url })
         : null
     }
   },
