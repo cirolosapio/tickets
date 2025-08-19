@@ -7,6 +7,10 @@ export default defineNuxtConfig({
     '/**': { swr: 3600 },
   },
 
+  image: {
+    domains: ['s1.ticketm.net']
+  },
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
