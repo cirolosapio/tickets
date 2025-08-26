@@ -15,7 +15,7 @@
         <div class="flex-1 flex flex-col gap-1">
           <div class="font-semibold text-lg line-clamp-2">{{ attraction.name }}</div>
           <div class="flex justify-between mt-1">
-            <Badges :classification="attraction.classifications[0]" v-if="attraction.classifications[0]" />
+            <Badges v-if="attraction.classifications[0]" :classification="attraction.classifications[0]" />
 
             <UButton size="xs" color="secondary" variant="soft" :to="`/?attractionId=${attraction.id}`">Eventi</UButton>
           </div>
