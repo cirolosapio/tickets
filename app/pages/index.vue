@@ -1,6 +1,11 @@
 <template>
   <div class="flex justify-between p-3">
-    <div>{{ data?.pagination.totalElements }} eventi trovati</div>
+    <div>
+      {{ data?.pagination.totalElements }} eventi trovati
+      <template v-if="attractionId && data?.pagination?.totalElements! > 0">
+        per artista {{ data?.rows[0]?._embedded?.attractions?.[0]?.name }}
+      </template>
+    </div>
     <UInput v-model="input" placeholder="Cerca" />
   </div>
 
