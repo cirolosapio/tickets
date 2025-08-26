@@ -15,6 +15,6 @@
       <NuxtLink to="/venues" class="pb-0.75 border-b-2 border-transparent hover:border-white transition"
         :class="{ 'border-white': $route.path === '/venues' }">Luoghi</NuxtLink>
     </div>
-    <DarkButton />
+    <DarkButton class="mobile:hidden" />
   </div>
 </template>
