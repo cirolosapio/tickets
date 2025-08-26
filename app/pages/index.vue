@@ -48,7 +48,7 @@
     </template>
   </div>
 
-  <div class="flex justify-center border-t border-default pt-4">
+  <div class="flex justify-center py-4">
     <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
   </div>
 </template>
