@@ -30,8 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import type { TableColumn } from '@nuxt/ui'
-import type { Eventt } from '~~/types'
+definePageMeta({
+  key: route => route.fullPath
+})
 
 const page = ref(0)
 const input = shallowRef('')
@@ -51,7 +52,6 @@ const { data, status } = await useFetch('/api/events', {
   watch: [page, keyword],
   params: { page, keyword, attractionId, subGenreId, venueId },
 })
-
 
 function formatDate (start?: any) {
   if (!start) return ''
