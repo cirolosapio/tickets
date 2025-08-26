@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between p-3">
     <div>{{ data?.pagination.totalElements }} luoghi trovati</div>
-    <UInput color="warning" v-model="input" placeholder="Cerca" />
+    <UInput v-model="input" color="warning" placeholder="Cerca" />
   </div>
 
 

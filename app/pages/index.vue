@@ -9,13 +9,13 @@
         per genere {{ data?.rows[0]?.classifications?.[0]?.subGenre?.name }}
       </template>
     </div>
-    <UInput color="warning" v-model="input" placeholder="Cerca" />
+    <UInput v-model="input" color="warning" placeholder="Cerca" />
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
     <template v-if="data?.rows?.length">
       <UCard v-for="event in data.rows" :key="event.id"
-        class="flex flex-col h-full shadow-md transition-all duration-200 bg-white/90">
+        class="flex flex-col h-full shadow-md transition-all duration-200 bg-white/90 dark:bg-gray-800">
         <div
           class="aspect-video w-full mb-3 flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg overflow-hidden">
           <Images v-if="event.images" :images="event.images" />
