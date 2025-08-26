@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import type { Attraction } from '~~/types';
 
-
 const { classification } = defineProps<{
   classification: Attraction['classifications'][0]
 }>()

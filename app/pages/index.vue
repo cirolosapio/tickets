@@ -15,18 +15,7 @@
           <div class="font-semibold text-lg line-clamp-2">{{ event.name }}</div>
           <div class="text-sm text-gray-500">{{ formatDate(event.dates?.start) }}</div>
           <div class="text-xs text-gray-400">{{ formatSales(event.sales?.public) }}</div>
-          <div class="flex flex-wrap gap-1 mt-1">
-            <UBadge
-              v-if="event.classifications?.[0]?.genre?.name && event.classifications[0].genre.name !== 'Non definito'"
-              color="primary" variant="soft">
-              {{ event.classifications[0].genre.name }}
-            </UBadge>
-            <UBadge
-              v-if="event.classifications?.[0]?.subGenre?.name && event.classifications[0].subGenre.name !== 'Non definito'"
-              color="neutral" variant="soft">
-              {{ event.classifications[0].subGenre.name }}
-            </UBadge>
-          </div>
+          <Badges :classification="event.classifications[0]" v-if="event.classifications?.length" />
         </div>
       </UCard>
     </template>
