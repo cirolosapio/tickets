@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between p-3">
     <div>{{ data?.pagination.totalElements }} artisti trovati</div>
-    <UInput v-model="input" placeholder="Cerca" />
+    <UInput color="warning" v-model="input" placeholder="Cerca" />
   </div>
 
 

@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-end p-3">
-    <UInput v-model="input" placeholder="Cerca" />
+    <UInput color="warning" v-model="input" placeholder="Cerca" />
   </div>
 
   <UTree :items @update:model-value="onSelect" />

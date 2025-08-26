@@ -9,7 +9,7 @@
         per genere {{ data?.rows[0]?.classifications?.[0]?.subGenre?.name }}
       </template>
     </div>
-    <UInput v-model="input" placeholder="Cerca" />
+    <UInput color="warning" v-model="input" placeholder="Cerca" />
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
