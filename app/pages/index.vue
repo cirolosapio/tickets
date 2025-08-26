@@ -24,11 +24,11 @@
           <div class="font-bold text-lg line-clamp-2 mb-1">
             {{ event.name }}
           </div>
-          <div v-if="event._embedded?.venues?.[0]?.name" class="flex items-center gap-2 text-sm text-gray-400">
-            <UIcon name="i-heroicons-map-pin" class="text-warning-400" />
+          <div v-if="event._embedded?.venues?.[0]?.name" class="flex items-center gap-2 text-sm text-gray-500">
+            <UIcon name="i-heroicons-map-pin-solid" class="text-warning-400" />
             <span>{{ event._embedded.venues[0].name }}</span>
           </div>
-          <div class="flex items-center gap-2 text-sm">
+          <div class="flex items-center gap-2 text-sm text-gray-400">
             <UIcon name="i-heroicons-calendar-days" class="text-warning-400" />
             <span>
               <template
