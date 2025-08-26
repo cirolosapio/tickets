@@ -12,15 +12,34 @@
   <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">
     <template v-if="data?.rows?.length">
       <UCard v-for="event in data.rows" :key="event.id"
-        class="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-200">
-        <div class="aspect-video w-full mb-2 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
+        class="flex flex-col h-full shadow-md transition-all duration-200 bg-white/90">
+        <div
+          class="aspect-video w-full mb-3 flex items-center justify-center bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg overflow-hidden">
           <Images v-if="event.images" :images="event.images" />
         </div>
-        <div class="flex-1 flex flex-col gap-1">
-          <div class="font-semibold text-lg line-clamp-2">{{ event.name }}</div>
-          <div class="text-sm text-gray-500">{{ formatDate(event.dates?.start) }}</div>
-          <div class="text-xs text-gray-400">{{ formatSales(event.sales?.public) }}</div>
-          <Badges :classification="event.classifications[0]" v-if="event.classifications?.length" />
+        <div class="flex-1 flex flex-col gap-2 px-2 pb-2">
+          <div class="font-bold text-lg line-clamp-2 mb-1">
+            {{ event.name }}
+          </div>
+          <div v-if="event._embedded?.venues?.[0]?.name" class="flex items-center gap-2 text-sm text-gray-400">
+            <UIcon name="i-heroicons-map-pin" class="text-primary-400" />
+            <span>{{ event._embedded.venues[0].name }}</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <UIcon name="i-heroicons-calendar-days" class="text-primary-400" />
+            <span>
+              <template
+                v-if="event.sales?.public?.startDateTime && new Date(event.sales.public.startDateTime) > new Date()">
+                {{ formatSales(event.sales.public) }}
+              </template>
+              <template v-else>
+                {{ formatDate(event.dates?.start) }}
+              </template>
+            </span>
+          </div>
+          <div class="mt-2">
+            <Badges v-if="event.classifications?.length" :classification="event.classifications[0]" />
+          </div>
         </div>
       </UCard>
     </template>
