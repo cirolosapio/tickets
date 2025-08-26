@@ -1,10 +1,8 @@
 <template>
   <div class="flex flex-wrap gap-1">
-    <UBadge v-if="primary" color="primary" variant="soft">
+    <UBadge v-if="primary" class="bg-gradient-to-r from-pink-500 via-yellow-500 to-red-500 text-white" variant="soft">
       {{ primary }}
-    </UBadge>
-    <UBadge v-if="secondary" color="neutral" variant="soft">
-      {{ secondary }}
+      <template v-if="secondary"> / {{ secondary }}</template>
     </UBadge>
   </div>
 </template>

@@ -5,6 +5,9 @@
       <template v-if="attractionId && data?.pagination?.totalElements! > 0">
         per artista {{ data?.rows[0]?._embedded?.attractions?.[0]?.name }}
       </template>
+      <template v-if="subGenreId && data?.pagination?.totalElements! > 0">
+        per genere {{ data?.rows[0]?.classifications?.[0]?.subGenre?.name }}
+      </template>
     </div>
     <UInput v-model="input" placeholder="Cerca" />
   </div>
@@ -22,11 +25,11 @@
             {{ event.name }}
           </div>
           <div v-if="event._embedded?.venues?.[0]?.name" class="flex items-center gap-2 text-sm text-gray-400">
-            <UIcon name="i-heroicons-map-pin" class="text-primary-400" />
+            <UIcon name="i-heroicons-map-pin" class="text-warning-400" />
             <span>{{ event._embedded.venues[0].name }}</span>
           </div>
           <div class="flex items-center gap-2 text-sm">
-            <UIcon name="i-heroicons-calendar-days" class="text-primary-400" />
+            <UIcon name="i-heroicons-calendar-days" class="text-warning-400" />
             <span>
               <template
                 v-if="event.sales?.public?.startDateTime && new Date(event.sales.public.startDateTime) > new Date()">
@@ -49,7 +52,8 @@
   </div>
 
   <div class="flex justify-center py-4">
-    <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
+    <UPagination active-color="secondary" :items-per-page="20" :total="data?.pagination?.totalElements"
+      @update:page="p => page = p - 1" />
   </div>
 </template>
 
