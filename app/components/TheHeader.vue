@@ -2,7 +2,8 @@
   <div class="sticky top-0 z-50 flex justify-between items-center p-4 bg-gray-800 text-white">
     <div class="text-xl sm:text-2xl font-bold tracking-wide flex items-center gap-2">
       <span class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
-        🎟️ TICKETS
+        🎟️
+        <template v-if="!isMobile">TICKETS</template>
       </span>
     </div>
     <div class="space-x-2 sm:space-x-4 flex items-center">
@@ -22,6 +23,6 @@
   </div>
 </template>
 <script setup lang="ts">
-const isMobile = useMediaQuery('(max-width: 768px)')
+const isMobile = useMediaQuery('(max-width: 767px)')
 const { loggedIn, openInPopup } = useUserSession()
 </script>
