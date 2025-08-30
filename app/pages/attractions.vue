@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between p-3">
     <div>{{ data?.pagination.totalElements }} artisti trovati</div>
-    <UInput v-model="input" color="warning" placeholder="Cerca" />
+    <UInput v-model="input" color="warning" placeholder="Cerca" :loading="status === 'pending'" />
   </div>
 
 
@@ -17,7 +17,13 @@
           <div class="flex justify-between mt-1">
             <Badges v-if="attraction.classifications[0]" :classification="attraction.classifications[0]" />
 
-            <UButton size="xs" color="secondary" variant="soft" :to="`/?attractionId=${attraction.id}`">Eventi</UButton>
+            <div class="flex items-center gap-1">
+              <UButton size="xs" color="secondary" variant="soft" :to="`/?attractionId=${attraction.id}`">
+                Eventi
+              </UButton>
+              <UButton disabled @click="addToFavorities(attraction.id)" v-if="loggedIn" size="xs" icon="i-lucide-star"
+                color="warning" variant="ghost" />
+            </div>
           </div>
         </div>
       </UCard>
@@ -29,19 +35,23 @@
     </template>
   </div>
 
-  <div class="flex justify-center border-t border-default pt-4">
-    <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
+  <div class="flex justify-center py-4">
+    <UPagination active-color="secondary" :items-per-page="20" :total="data?.pagination?.totalElements"
+      @update:page="p => page = p - 1" />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Row } from '@tanstack/vue-table'
-import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
-import type { Attraction } from '~~/types'
+// import type { Row } from '@tanstack/vue-table'
+// import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
+// import type { Attraction } from '~~/types'
 // import { useClipboard } from '@vueuse/core'
 
-const UDropdownMenu = resolveComponent('UDropdownMenu')
-const UButton = resolveComponent('UButton')
+const toast = useToast()
+const { loggedIn } = useUserSession()
+
+// const UDropdownMenu = resolveComponent('UDropdownMenu')
+// const UButton = resolveComponent('UButton')
 
 // const toast = useToast()
 // const { copy } = useClipboard()
@@ -63,94 +73,114 @@ const { data, status } = await useLazyFetch('/api/attractions', {
   params: { page, keyword },
 })
 
-const columns: TableColumn<Attraction>[] = [
-  {
-    accessorKey: 'images',
-    header: '',
-    meta: { class: { td: 'min-w-30' } },
-    cell: ({ getValue }) => {
-      const a = getValue<Attraction['images']>()
-      const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
-      return first
-        ? h('img', { src: first.url })
-        : null
-    }
-  },
-  // { accessorKey: 'id', },
-  // { accessorKey: 'locale', },
-  // { accessorKey: '_links', },
-  { accessorKey: 'name', header: 'Nome' },
-  {
-    accessorKey: 'genre',
-    header: 'Genere',
-    cell: ({ row }) => {
-      const val = row.original.classifications[0]?.genre?.name
-      return val === 'Non definito' ? undefined : val
-    }
-  },
-  {
-    accessorKey: 'subGenre',
-    header: 'Sotto Genere',
-    cell: ({ row }) => {
-      const val = row.original.classifications[0]?.subGenre?.name
-      return val === 'Non definito' ? undefined : val
-    }
-  },
-  {
-    id: 'actions',
-    header: 'Azioni',
-    cell: ({ row }) => {
-      return h(
-        'div',
-        { class: 'text-right' },
-        h(
-          UDropdownMenu,
-          {
-            content: {
-              align: 'end'
-            },
-            items: getRowItems(row),
-            'aria-label': 'Actions dropdown'
-          },
-          () =>
-            h(UButton, {
-              icon: 'i-lucide-ellipsis-vertical',
-              color: 'neutral',
-              variant: 'ghost',
-              class: 'ml-auto',
-              'aria-label': 'Actions dropdown'
-            })
-        )
-      )
-    }
+async function addToFavorities (attractionId: string) {
+  try {
+    await $fetch('/api/favorities', {
+      method: 'POST',
+      body: { attractionId }
+    })
+    toast.add({
+      title: 'Artista aggiunto ai preferiti!',
+      color: 'success',
+      icon: 'i-lucide-circle-check'
+    })
+  } catch (error) {
+    toast.add({
+      title: 'Errore durante l\'aggiunta ai preferiti.',
+      color: 'error',
+      icon: 'i-lucide-alert-circle'
+    })
   }
-]
-
-function getRowItems (row: Row<Attraction>): DropdownMenuItem[] {
-  return [
-    // {
-    //   type: 'label',
-    //   label: 'Azioni',
-    // },
-    // {
-    //   label: 'Copia ID attrazione',
-    //   async onSelect () {
-    //     await copy(row.original.id)
-
-    //     toast.add({
-    //       title: 'ID copiato negli appunti!',
-    //       color: 'success',
-    //       icon: 'i-lucide-circle-check'
-    //     })
-    //   }
-    // },
-    // {
-    //   type: 'separator'
-    // },
-    {
-      label: 'Visualizza Eventi',
-      to: `/?attractionId=${row.original.id}`
-    }
-  ]
 }
+
+// const columns: TableColumn<Attraction>[] = [
+//   {
+//     accessorKey: 'images',
+//     header: '',
+//     meta: { class: { td: 'min-w-30' } },
+//     cell: ({ getValue }) => {
+//       const a = getValue<Attraction['images']>()
+//       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
+//       return first
+//         ? h('img', { src: first.url })
+//         : null
+//     }
+//   },
+//   // { accessorKey: 'id', },
+//   // { accessorKey: 'locale', },
+//   // { accessorKey: '_links', },
+//   { accessorKey: 'name', header: 'Nome' },
+//   {
+//     accessorKey: 'genre',
+//     header: 'Genere',
+//     cell: ({ row }) => {
+//       const val = row.original.classifications[0]?.genre?.name
+//       return val === 'Non definito' ? undefined : val
+//     }
+//   },
+//   {
+//     accessorKey: 'subGenre',
+//     header: 'Sotto Genere',
+//     cell: ({ row }) => {
+//       const val = row.original.classifications[0]?.subGenre?.name
+//       return val === 'Non definito' ? undefined : val
+//     }
+//   },
+//   {
+//     id: 'actions',
+//     header: 'Azioni',
+//     cell: ({ row }) => {
+//       return h(
+//         'div',
+//         { class: 'text-right' },
+//         h(
+//           UDropdownMenu,
+//           {
+//             content: {
+//               align: 'end'
+//             },
+//             items: getRowItems(row),
+//             'aria-label': 'Actions dropdown'
+//           },
+//           () =>
+//             h(UButton, {
+//               icon: 'i-lucide-ellipsis-vertical',
+//               color: 'neutral',
+//               variant: 'ghost',
+//               class: 'ml-auto',
+//               'aria-label': 'Actions dropdown'
+//             })
+//         )
+//       )
+//     }
+//   }
+// ]
+
+// function getRowItems (row: Row<Attraction>): DropdownMenuItem[] {
+//   return [
+//     // {
+//     //   type: 'label',
+//     //   label: 'Azioni',
+//     // },
+//     // {
+//     //   label: 'Copia ID attrazione',
+//     //   async onSelect () {
+//     //     await copy(row.original.id)
+
+//     //     toast.add({
+//     //       title: 'ID copiato negli appunti!',
+//     //       color: 'success',
+//     //       icon: 'i-lucide-circle-check'
+//     //     })
+//     //   }
+//     // },
+//     // {
+//     //   type: 'separator'
+//     // },
+//     {
+//       label: 'Visualizza Eventi',
+//       to: `/?attractionId=${row.original.id}`
+//     }
+//   ]
+// }
 </script>

@@ -4,7 +4,7 @@ const SEGMENT_MUSIC = 'KZFzniwnSyZfZ7v7nJ'
 
 export default defineEventHandler(async (event) => {
   const params = getQuery(event)
-  params.locale = 'it-it'
+  params.locale = 'it-it,it,*'
   params.segmentId = SEGMENT_MUSIC
 
   const data = await client(event)<AttractionResponse>('attractions.json', { params })

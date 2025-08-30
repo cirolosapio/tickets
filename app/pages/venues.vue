@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between p-3">
     <div>{{ data?.pagination.totalElements }} luoghi trovati</div>
-    <UInput v-model="input" color="warning" placeholder="Cerca" />
+    <UInput v-model="input" color="warning" placeholder="Cerca" :loading="status === 'pending'" />
   </div>
 
 
@@ -11,6 +11,9 @@
         class="flex flex-col h-full shadow-md hover:shadow-lg transition-shadow duration-200">
         <div class="aspect-video w-full mb-2 flex items-center justify-center bg-gray-100 rounded-md overflow-hidden">
           <Images v-if="venue.images" :images="venue.images" />
+          <!-- <div v-for="img in venue.images">
+            <img :key="img.url" :src="img.url" class="object-cover w-full h-full" />
+          </div> -->
         </div>
         <div class="flex-1 flex flex-col gap-1">
           <div class="font-semibold text-lg line-clamp-2">{{ venue.name }}</div>
@@ -34,8 +37,9 @@
     </template>
   </div>
 
-  <div class="flex justify-center border-t border-default pt-4">
-    <UPagination :items-per-page="20" :total="data?.pagination?.totalElements" @update:page="p => page = p - 1" />
+  <div class="flex justify-center py-4">
+    <UPagination active-color="secondary" :items-per-page="20" :total="data?.pagination?.totalElements"
+      @update:page="p => page = p - 1" />
   </div>
 </template>
 

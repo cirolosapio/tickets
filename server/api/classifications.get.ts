@@ -5,7 +5,7 @@ const SEGMENT_MUSIC = 'KZFzniwnSyZfZ7v7nJ'
 
 export default defineEventHandler(async (event) => {
   const params = getQuery(event)
-  params.locale = 'it-it'
+  params.locale = 'it-it,it,*'
 
   const data = await client(event)<ClassificationResponse>('classifications.json', { params })
 

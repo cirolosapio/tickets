@@ -4,25 +4,35 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "rm -rf .nuxt .output && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint . --ext .ts,.vue"
+    "lint": "eslint . --ext .ts,.vue",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "@nuxt/eslint": "1.8.0",
     "@nuxt/image": "1.11.0",
     "@nuxt/ui": "3.3.0",
+    "@pinia/nuxt": "0.11.2",
     "@sentry/nuxt": "^10.5.0",
     "@vueuse/nuxt": "13.6.0",
+    "drizzle-orm": "^0.44.5",
     "eslint": "^9.33.0",
     "nuxt": "^4.0.3",
+    "nuxt-auth-utils": "0.5.23",
+    "pg": "^8.16.3",
+    "pinia": "^3.0.3",
     "typescript": "^5.9.2",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.64"
+    "@iconify-json/lucide": "^1.2.64",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.4"
   }
 }

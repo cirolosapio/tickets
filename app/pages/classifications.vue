@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-end p-3">
-    <UInput v-model="input" color="warning" placeholder="Cerca" />
+    <UInput v-model="input" color="warning" placeholder="Cerca" :loading="status === 'pending'" />
   </div>
 
   <UTree :items @update:model-value="onSelect" />

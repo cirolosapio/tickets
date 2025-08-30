@@ -5,7 +5,7 @@
         🎟️ TICKETS
       </span>
     </div>
-    <div class="space-x-2 sm:space-x-4">
+    <div class="space-x-2 sm:space-x-4 flex items-center">
       <NuxtLink to="/" class="pb-0.75 border-b-2 border-transparent hover:border-white transition"
         :class="{ 'border-white': $route.path === '/' }">Eventi</NuxtLink>
       <NuxtLink to="/attractions" class="pb-0.75 border-b-2 border-transparent hover:border-white transition"
@@ -14,7 +14,14 @@
         :class="{ 'border-white': $route.path === '/classifications' }">Generi</NuxtLink>
       <NuxtLink to="/venues" class="pb-0.75 border-b-2 border-transparent hover:border-white transition"
         :class="{ 'border-white': $route.path === '/venues' }">Luoghi</NuxtLink>
+      <UserMenu :collapsed="isMobile" v-if="loggedIn" />
+      <UButton v-else icon="i-simple-icons-google" variant="soft" color="neutral" @click="openInPopup('/auth/google')">
+        Login
+        with Google</UButton>
     </div>
-    <DarkButton class="hidden sm:inline-flex" />
   </div>
 </template>
+<script setup lang="ts">
+const isMobile = useMediaQuery('(max-width: 768px)')
+const { loggedIn, openInPopup } = useUserSession()
+</script>

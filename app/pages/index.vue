@@ -3,13 +3,13 @@
     <div>
       {{ data?.pagination.totalElements }} eventi trovati
       <template v-if="attractionId && data?.pagination?.totalElements! > 0">
-        per artista {{ data?.rows[0]?._embedded?.attractions?.[0]?.name }}
+        per artista <b>{{ data?.rows[0]?._embedded?.attractions?.[0]?.name }}</b>
       </template>
       <template v-if="subGenreId && data?.pagination?.totalElements! > 0">
-        per genere {{ data?.rows[0]?.classifications?.[0]?.subGenre?.name }}
+        per genere <b>{{ data?.rows[0]?.classifications?.[0]?.subGenre?.name }}</b>
       </template>
     </div>
-    <UInput v-model="input" color="warning" placeholder="Cerca" />
+    <UInput v-model="input" color="warning" placeholder="Cerca" :loading="status === 'pending'" />
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2">

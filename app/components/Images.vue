@@ -11,5 +11,5 @@ const { images } = defineProps<{
   images: Attraction['images']
 }>()
 
-const first = computed(() => images.find(img => img.width >= 300 && img.width <= 600))
+const first = computed(() => images.find(img => img.width >= 300 && img.width <= 600) || images[0])
 </script>
