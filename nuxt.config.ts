@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   routeRules: {
-    '/**': { swr: 3600 },
+    '/': { prerender: false },
   },
 
   image: {
@@ -33,12 +33,11 @@ export default defineNuxtConfig({
   },
 
   sentry: {
+    autoInjectServerSentry: 'top-level-import',
     sourceMapsUploadOptions: {
       org: 'crewbe',
       project: 'tickets'
     },
-
-    autoInjectServerSentry: 'top-level-import'
   },
 
   sourcemap: {
