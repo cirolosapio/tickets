@@ -5,7 +5,7 @@
         🎟️ TICKETS
       </span>
     </div>
-    <div class="space-x-4">
+    <div class="space-x-2 sm:space-x-4">
       <NuxtLink to="/" class="pb-0.75 border-b-2 border-transparent hover:border-white transition"
         :class="{ 'border-white': $route.path === '/' }">Eventi</NuxtLink>
       <NuxtLink to="/attractions" class="pb-0.75 border-b-2 border-transparent hover:border-white transition"
