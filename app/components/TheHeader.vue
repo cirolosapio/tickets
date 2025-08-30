@@ -17,8 +17,8 @@
         :class="{ 'border-white': $route.path === '/venues' }">Luoghi</NuxtLink>
       <UserMenu :collapsed="isMobile" v-if="loggedIn" />
       <UButton v-else icon="i-simple-icons-google" variant="soft" color="neutral" @click="openInPopup('/auth/google')">
-        Login
-        with Google</UButton>
+        <template v-if="!isMobile">Login with Google</template>
+      </UButton>
     </div>
   </div>
 </template>
