@@ -1,4 +1,3 @@
-import client from "../client"
 import type { EventResponse, Eventt } from '~~/types'
 
 const SEGMENT_MUSIC = 'KZFzniwnSyZfZ7v7nJ'

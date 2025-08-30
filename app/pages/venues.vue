@@ -28,7 +28,9 @@
       </UCard>
     </template>
     <template v-else>
-      <div class="col-span-full text-center text-gray-400 py-8">Nessun luogo trovato.</div>
+      <div class="col-span-full text-center text-gray-400 py-8">
+        {{ status === 'pending' ? 'Loading...' : 'Nessun luogo trovato.' }}
+      </div>
     </template>
   </div>
 
@@ -42,8 +44,8 @@ import type { Row } from '@tanstack/vue-table'
 import type { DropdownMenuItem, TableColumn } from '@nuxt/ui'
 import type { Venue } from '~~/types'
 
-const UDropdownMenu = resolveComponent('UDropdownMenu')
-const UButton = resolveComponent('UButton')
+// const UDropdownMenu = resolveComponent('UDropdownMenu')
+// const UButton = resolveComponent('UButton')
 
 const page = ref(0)
 const input = shallowRef('')
@@ -57,94 +59,94 @@ watchDebounced(
   { debounce: 500, maxWait: 1000 },
 )
 
-const { data, status } = await useFetch('/api/venues', {
+const { data, status } = await useLazyFetch('/api/venues', {
   watch: [page, keyword],
   params: { page, keyword },
 })
 
-const columns: TableColumn<Venue>[] = [
-  {
-    accessorKey: 'images',
-    header: '',
-    meta: { class: { td: 'min-w-30' } },
-    cell: ({ getValue }) => {
-      const a = getValue<Venue['images']>()
-      const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
-      return first
-        ? h('img', { src: first.url })
-        : null
-    }
-  },
-  // { accessorKey: 'id', },
-  { accessorKey: 'name', header: 'Nome' },
-  { accessorKey: 'timezone', header: 'Fuso Orario' },
-  {
-    accessorKey: 'city',
-    header: 'Città',
-    cell: ({ row }) => { return row.getValue<Venue['city']>('city').name }
-  },
-  {
-    accessorKey: 'state',
-    header: 'Stato',
-    cell: ({ row }) => {
-      const val = row.getValue<Venue['state']>('state')
-      return val ? [val.stateCode, val.name].filter(Boolean).join(', ') : undefined
-    }
-  },
-  { accessorKey: 'postalCode', header: 'CAP' },
-  {
-    accessorKey: 'country',
-    header: 'Nazione',
-    cell: ({ row }) => {
-      const val = row.getValue<Venue['country']>('country')
-      return val.countryCode + ' - ' + val.name
-    }
-  },
-  {
-    accessorKey: 'address',
-    header: 'Indirizzo',
-    cell: ({ row }) => {
-      const val = row.getValue<Venue['address']>('address')
-      return val ? [val.line1, val.line2, val.line3].filter(Boolean).join(', ') : undefined
-    }
-  },
-  {
-    accessorKey: 'markets',
-    header: 'Mercati',
-    cell: ({ row }) => {
-      const val = row.getValue<Venue['markets']>('markets')
-      return val?.map(market => market.name).join(', ')
-    }
-  },
-  {
-    id: 'actions',
-    header: 'Azioni',
-    cell: ({ row }) => {
-      return h(
-        'div',
-        { class: 'text-right' },
-        h(
-          UDropdownMenu,
-          {
-            content: {
-              align: 'end'
-            },
-            items: getRowItems(row),
-            'aria-label': 'Actions dropdown'
-          },
-          () =>
-            h(UButton, {
-              icon: 'i-lucide-ellipsis-vertical',
-              color: 'neutral',
-              variant: 'ghost',
-              class: 'ml-auto',
-              'aria-label': 'Actions dropdown'
-            })
-        )
-      )
-    }
-  }
-]
+// const columns: TableColumn<Venue>[] = [
+//   {
+//     accessorKey: 'images',
+//     header: '',
+//     meta: { class: { td: 'min-w-30' } },
+//     cell: ({ getValue }) => {
+//       const a = getValue<Venue['images']>()
+//       const first = a?.find(img => img.width >= 300 && img.width <= 600) || a?.[0]
+//       return first
+//         ? h('img', { src: first.url })
+//         : null
+//     }
+//   },
+//   // { accessorKey: 'id', },
+//   { accessorKey: 'name', header: 'Nome' },
+//   { accessorKey: 'timezone', header: 'Fuso Orario' },
+//   {
+//     accessorKey: 'city',
+//     header: 'Città',
+//     cell: ({ row }) => { return row.getValue<Venue['city']>('city').name }
+//   },
+//   {
+//     accessorKey: 'state',
+//     header: 'Stato',
+//     cell: ({ row }) => {
+//       const val = row.getValue<Venue['state']>('state')
+//       return val ? [val.stateCode, val.name].filter(Boolean).join(', ') : undefined
+//     }
+//   },
+//   { accessorKey: 'postalCode', header: 'CAP' },
+//   {
+//     accessorKey: 'country',
+//     header: 'Nazione',
+//     cell: ({ row }) => {
+//       const val = row.getValue<Venue['country']>('country')
+//       return val.countryCode + ' - ' + val.name
+//     }
+//   },
+//   {
+//     accessorKey: 'address',
+//     header: 'Indirizzo',
+//     cell: ({ row }) => {
+//       const val = row.getValue<Venue['address']>('address')
+//       return val ? [val.line1, val.line2, val.line3].filter(Boolean).join(', ') : undefined
+//     }
+//   },
+//   {
+//     accessorKey: 'markets',
+//     header: 'Mercati',
+//     cell: ({ row }) => {
+//       const val = row.getValue<Venue['markets']>('markets')
+//       return val?.map(market => market.name).join(', ')
+//     }
+//   },
+//   {
+//     id: 'actions',
+//     header: 'Azioni',
+//     cell: ({ row }) => {
+//       return h(
+//         'div',
+//         { class: 'text-right' },
+//         h(
+//           UDropdownMenu,
+//           {
+//             content: {
+//               align: 'end'
+//             },
+//             items: getRowItems(row),
+//             'aria-label': 'Actions dropdown'
+//           },
+//           () =>
+//             h(UButton, {
+//               icon: 'i-lucide-ellipsis-vertical',
+//               color: 'neutral',
+//               variant: 'ghost',
+//               class: 'ml-auto',
+//               'aria-label': 'Actions dropdown'
+//             })
+//         )
+//       )
+//     }
+//   }
+// ]
 
 function getRowItems (row: Row<Venue>): DropdownMenuItem[] {
   return [

@@ -1,4 +1,3 @@
-import client from "../client"
 import type { Venue, VenueResponse } from '~~/types'
 
 export default defineEventHandler(async (event) => {

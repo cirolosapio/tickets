@@ -47,7 +47,9 @@
       </UCard>
     </template>
     <template v-else>
-      <div class="col-span-full text-center text-gray-400 py-8">Nessun evento trovato.</div>
+      <div class="col-span-full text-center text-gray-400 py-8">
+        {{ status === 'pending' ? 'Loading...' : 'Nessun evento trovato.' }}
+      </div>
     </template>
   </div>
 
@@ -76,7 +78,7 @@ watchDebounced(
 
 const { attractionId, subGenreId, venueId } = useRoute<'/events/'>().query
 
-const { data, status } = await useFetch('/api/events', {
+const { data, status } = await useLazyFetch('/api/events', {
   watch: [page, keyword],
   params: { page, keyword, attractionId, subGenreId, venueId },
 })

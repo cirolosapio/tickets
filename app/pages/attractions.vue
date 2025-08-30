@@ -23,7 +23,9 @@
       </UCard>
     </template>
     <template v-else>
-      <div class="col-span-full text-center text-gray-400 py-8">Nessun artista trovato.</div>
+      <div class="col-span-full text-center text-gray-400 py-8">
+        {{ status === 'pending' ? 'Loading...' : 'Nessun artista trovato.' }}
+      </div>
     </template>
   </div>
 
@@ -56,7 +58,7 @@ watchDebounced(
   { debounce: 500, maxWait: 1000 },
 )
 
-const { data, status } = await useFetch('/api/attractions', {
+const { data, status } = await useLazyFetch('/api/attractions', {
   watch: [page, keyword],
   params: { page, keyword },
 })

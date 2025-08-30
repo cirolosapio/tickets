@@ -1,4 +1,3 @@
-import client from "../client"
 import type { Attraction, AttractionResponse } from '~~/types'
 
 const SEGMENT_MUSIC = 'KZFzniwnSyZfZ7v7nJ'

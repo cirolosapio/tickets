@@ -1,5 +1,4 @@
 import type { TreeItem } from "@nuxt/ui"
-import client from "../client"
 import type { ClassificationResponse } from '~~/types'
 
 const SEGMENT_MUSIC = 'KZFzniwnSyZfZ7v7nJ'
